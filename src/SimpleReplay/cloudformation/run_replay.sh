@@ -32,8 +32,6 @@ aws s3 cp ./$bucket_keyprefix/replay_target.yaml s3://$replay_bucket/$bucket_key
 aws s3 cp ./$bucket_keyprefix/replay_replica.yaml s3://$replay_bucket/$bucket_keyprefix/replay/
 aws s3 cp s3://$extract_bucket/$bucket_keyprefix/source_system_tables/ s3://$replay_bucket/$bucket_keyprefix/source/detailed_query_stats/ --recursive
 
-aws s3 cp s3://$replay_bucket/config/replay_target.yaml ./$bucket_keyprefix/replay_target.yaml
-aws s3 cp s3://$replay_bucket/config/replay_replica.yaml ./$bucket_keyprefix/replay_replica.yaml
 #
 if [[ $copy_replacements == "true" ]]; then
  aws s3 cp s3://$extract_bucket/$bucket_keyprefix/extract/$extract_output/copy_replacements.csv . || true
