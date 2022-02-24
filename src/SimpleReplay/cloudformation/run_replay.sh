@@ -23,18 +23,20 @@ mkdir -p $bucket_keyprefix
 aws s3 cp s3://$replay_bucket/config/replay.yaml ./$bucket_keyprefix/replay_target.yaml
 sed -i "s#workload_location: \"\"#workload_location: \"s3://$extract_bucket/$bucket_keyprefix/extract/$extract_output\"#g" ./$bucket_keyprefix/replay_target.yaml
 sed -i "s#target_cluster_endpoint: \"\"#target_cluster_endpoint: \"$cluster_endpoint\"#g"  ./$bucket_keyprefix/replay_target.yaml
-sed -i s/hostxx/$cluster_endpoint/g ./$bucket_keyprefix/replay_target.yaml
 #
 cp -f ./$bucket_keyprefix/replay_target.yaml ./$bucket_keyprefix/replay_replica.yaml
 sed -i "s#replay_output: \"\"#replay_output: \"s3://$replay_bucket/$bucket_keyprefix/replay/replay_output_target\"#g" ./$bucket_keyprefix/replay_target.yaml
 sed -i "s#replay_output: \"\"#replay_output: \"s3://$replay_bucket/$bucket_keyprefix/replay/replay_output_replica\"#g" ./$bucket_keyprefix/replay_replica.yaml
+if [[ $replay_type == "replica" ]]; then
+  sed -i s/hostxx/$cluster_endpoint/g ./$bucket_keyprefix/replay_replica.yaml
+fi
+if [[ $replay_type == "target" ]]; then
+  sed -i s/hostxx/$cluster_endpoint/g ./$bucket_keyprefix/replay_target.yaml
+fi
 #
 aws s3 cp ./$bucket_keyprefix/replay_target.yaml s3://$replay_bucket/$bucket_keyprefix/replay/
 aws s3 cp ./$bucket_keyprefix/replay_replica.yaml s3://$replay_bucket/$bucket_keyprefix/replay/
 aws s3 cp s3://$extract_bucket/$bucket_keyprefix/source_system_tables/ s3://$replay_bucket/$bucket_keyprefix/source/detailed_query_stats/ --recursive
-
-cat ./$bucket_keyprefix/replay_target.yaml
-cat ./$bucket_keyprefix/replay_replica.yaml
 #
 if [[ $copy_replacements == "true" ]]; then
  aws s3 cp s3://$extract_bucket/$bucket_keyprefix/extract/$extract_output/copy_replacements.csv . || true
