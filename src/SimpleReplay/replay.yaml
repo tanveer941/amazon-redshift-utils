@@ -5,7 +5,7 @@ tag: ""
 workload_location: ""
 
 # Endpoint and username of target cluster to replay queries on
-target_cluster_endpoint: "host:port/database"
+target_cluster_endpoint: "hostxx:5439/icm_stg"
 target_cluster_region: ""
 master_username: ""
 
