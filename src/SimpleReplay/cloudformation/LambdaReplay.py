@@ -200,9 +200,11 @@ def sql_status(query_id):
 
 def run_replay(client, replay_bucket, instance_id, clusterid, cluster_type, prefix, extract_output):
     desc = client.describe_clusters(ClusterIdentifier=clusterid)['Clusters'][0]
-    cluster_endpoint = desc.get('Endpoint') .get('Address') + ":" + str(desc.get('Endpoint') .get('Port')) + "/" + desc.get('DBName')
-    command = "sh /amazonutils/amazon-redshift-utils/src/SimpleReplay/cloudformation/run_replay.sh " + prefix + " " + extract_output + " " + cluster_type + " " + cluster_endpoint
+    # cluster_endpoint = desc.get('Endpoint') .get('Address') + ":" + str(desc.get('Endpoint') .get('Port')) + "/" + desc.get('DBName')
+    cluster_endpoint = desc.get('Endpoint').get('Address')
     print("cluster_endpoint::", cluster_endpoint)
+    command = "sh /amazonutils/amazon-redshift-utils/src/SimpleReplay/cloudformation/run_replay.sh " + prefix + " " + extract_output + " " + cluster_type + " " + cluster_endpoint
+    
     print(command)
     response = boto3.client('ssm').send_command(InstanceIds=[instance_id],
                                                 DocumentName='AWS-RunShellScript',
