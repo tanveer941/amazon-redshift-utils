@@ -6,7 +6,7 @@ workload_location: ""
 
 # Endpoint and username of target cluster to replay queries on
 target_cluster_endpoint: "hostxx:5439/icm_stg"
-target_cluster_region: ""
+target_cluster_region: "us-east-1"
 master_username: ""
 
 # Required only for playback using ODBC (pyodbc)
